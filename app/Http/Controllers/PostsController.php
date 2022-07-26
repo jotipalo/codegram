@@ -6,9 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Intervention\Image\Facades\Image;
 
 class PostsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function create()
     {
         return view('posts.create');
@@ -16,16 +23,29 @@ class PostsController extends Controller
 
     public function store()
     {
-        $uid = Auth::user()->id;
+        //$uid = Auth::user()->id;
         $data = request()->validate([
             'caption' => 'required',
             'image' => ['required', 'image'],
         ]);
 
-        print_r(request());
+        $imagepath = (request('image')->store('uploads', 'public'));
 
-        Post::create($data);
+        $image = Image::make(public_path("storage/{$imagepath}"))->fit(324, 324);
+        $image->save();
 
-        dd(request()->all());
+
+        auth()->user()->posts()->create([
+            'caption' => $data['caption'],
+            'image' => $imagepath,
+        ]);
+
+        return redirect('/profile/' . auth()->user()->id);
+
+    }
+
+    public function show(\App\Models\Post $post)
+    {
+        return view('posts.show', compact('post'));
     }
 }
