@@ -10,16 +10,27 @@
             <div>
                 <div class="d-flex align-items-center">
                     <div style="padding-right: 1em;">
-                        <img src="/storage/{{ $post->user->profile->image }}" class="rounded-circle" style="max-width: 50px;">
+                        <img src="{{ $post->user->profile->profileImage() }}" class="rounded-circle" style="max-width: 50px;">
                     </div>
                     <div>
-                        <div><strong>{{ $post->user->username }}</strong></div>
+                        <div><strong>
+                            <a href="/profile/{{ $post->user->id }}">
+                                <span class="text-dark">{{ $post->user->username }}</span>
+                            </a></strong>
+                            <a href="#" style="padding-left: 1em;">Follow</a>
+                        </div>
                     </div>
                 </div>
 
                 <hr>
 
-                <p><span><strong>{{ $post->user->username }}</strong></span> {{ $post->caption }}</p>
+                <p>
+                    <span><strong>
+                        <a href="/profile/{{ $post->user->id }}">
+                            <span class="text-dark">{{ $post->user->username }}</span>
+                        </a>
+                    </strong> {{ $post->caption }}
+                </p>
             </div>
         </div>
     </div>

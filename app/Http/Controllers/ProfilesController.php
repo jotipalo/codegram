@@ -35,15 +35,18 @@ class ProfilesController extends Controller
         ]);
 
         if (request('image')) {
-            $imagepath = (request('image')->store('profile', 'public'));
+            $imagePath = (request('image')->store('profile', 'public'));
 
-            $image = Image::make(public_path("storage/{$imagepath}"))->fit(324, 324);
+            $image = Image::make(public_path("storage/{$imagePath}"))->fit(324, 324);
             $image->save();
+
+            $imageArray = ['image' => $imagePath];
         }
 
+        
         auth()->user()->profile->update(array_merge(
             $data,
-            ['image' => $imagepath]
+            $imageArray ?? []
         ));
 
         return redirect("/profile/{$user->id}");
