@@ -8,7 +8,17 @@
         </div>
         <div class="col-9 pt-5">
             <div class="d-flex justify-content-between align-items-baseline">
-                <h1>{{ $user->username }}</h1>
+                <div class="d-flex align-items-center">
+                    <h1>{{ $user->username }}</h1>
+
+                    <form action="/profile/u/{{ $user->id }}" method="post">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+
+
+                        <button class="btn btn-primary" style="margin-left: 1em;">Follow</button>
+                        
+                    </form>
+                </div>
 
                 @can ('update', $user->profile)
                     <a href="/p/create" class="btn btn-primary">Add New Post</a>
